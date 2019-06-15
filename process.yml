@@ -1,7 +1,0 @@
-apps:
-  - name: koa-chat
-    script: index.js
-    exec_mode: cluster
-    instances: 3
-  # - name: service
-  #   script: service.js
