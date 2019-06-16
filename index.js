@@ -1,68 +1,30 @@
-if (process.env.TRACE) {
-  require('./libs/trace');
-}
-
 const Koa = require('koa');
 const app = new Koa();
 
 const config = require('config');
-
-// keys for in-koa KeyGrip cookie signing (used in session, maybe other modules)
-app.keys = [config.get('secret')];
+const mongoose = require('./libs/mongoose');
 
 const path = require('path');
 const fs = require('fs');
 
-const handlers = fs.readdirSync(path.join(__dirname, 'handlers')).sort();
+const handlers = fs.readdirSync(path.join(__dirname, 'middlewares')).sort();
 
-handlers.forEach(handler => require('./handlers/' + handler).init(app));
+handlers.forEach(handler => require('./middlewares/' + handler).init(app));
 
-// ---------------------------------------
+// app.use((ctx, next) => {
+//   ctx.cookies.set('csrf', ctx.csrf, { signed: false, httpOnly: true });
+//   return next();
+// });
 
+// can be split into files too
 const Router = require('koa-router');
 
 const router = new Router();
 
-let clients = [];
-
-router.get('/subscribe', async (ctx, next) => {
-
-  ctx.set('Cache-Control', 'no-cache,must-revalidate');
-
-  const message = await new Promise((resolve) => {
-    clients.push(resolve);
-
-    ctx.res.on('close', function() {
-      clients.splice(clients.indexOf(resolve), 1);
-      resolve();
-    });
-  });
-
-  ctx.body = message;
-
-});
-
-router.post('/publish', async (ctx, next) => {
-  const message = ctx.request.body.message;
-
-  if (!message) {
-    ctx.throw(400);
-  }
-
-  clients.forEach(function(resolve) {
-    resolve(message);
-  });
-
-  clients = [];
-
-  ctx.body = 'ok';
-
-});
+router.get('/', require('./routes/frontpage').get);
+router.post('/login', require('./routes/login').post);
+router.post('/logout', require('./routes/logout').post);
 
 app.use(router.routes());
 
-if (module.parent) {
-  module.exports = app;
-} else {
-  app.listen(config.get('port'));
-}
+app.listen(3000);
