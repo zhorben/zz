@@ -10,7 +10,10 @@ module.exports = {
   mongoDB: process.env.MONGODB_URI || 'mongodb://localhost/zhorben',
   mongoose: {
     uri: 'mongodb://localhost/zhorben',
-    options: {}
+    options: {
+      useNewUrlParser: true,
+      useCreateIndex: true
+    }
   },
   crypto: {
     hash: {

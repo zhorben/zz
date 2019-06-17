@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "prod": "node index.js"
+    "start": "NODE_PATH=./utils:./modules node index.js"
   },
   "dependencies": {
     "clarify": "^2.0.0",
@@ -19,6 +19,7 @@
     "config": "^1.31.0",
     "crypto": "^1.0.1",
     "gulp": "^4.0.2",
+    "gulp-nodemon": "^2.4.2",
     "koa": "^2.7.0",
     "koa-bodyparser": "^3.2.0",
     "koa-convert": "^1.2.0",

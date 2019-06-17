@@ -27,6 +27,6 @@ module.exports = async function clearDatabase() {
 
   await Promise.all(mongoose.modelNames().map(function(modelName) {
     const model = mongoose.model(modelName);
-    return promisify(cb => model.ensureIndexes(cb))();
+    return promisify(cb => model.createIndexes(cb))();
   }));
 };
