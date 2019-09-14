@@ -34,7 +34,7 @@ module.exports = {
   },
   providers: {
     facebook: {
-      appId: '1584514044907807',
+      appId: '478906086298054',
       appSecret: '339a49fe96f98727d1fe5cc5fdc531d0',
       // test: {
       //   login: 'course.test.facebook@gmail.com',
