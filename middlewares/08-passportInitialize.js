@@ -1,4 +1,4 @@
-const passport = require('../libs/passport');
+const passport = require('koa-passport');
 
 // - инициализовать ctx.req._passport (вспомогательный контекст, нам не понадобится)
 // - сделать на ctx методы

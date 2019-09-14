@@ -1,8 +1,9 @@
 const passport = require('koa-passport');
-const User = require('../../models/user');
 
 require('./serialize');
 
-require('./localStrategy');
+passport.use(require('./localStrategy'));
+passport.use(require('./facebookStrategy'));
+passport.use(require('./googleStrategy'));
 
 module.exports = passport;

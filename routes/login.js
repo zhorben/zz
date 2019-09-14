@@ -11,7 +11,7 @@ exports.post = async function(ctx, next) {
     failureRedirect: '/',
     //failureMessage: true // запишет сообщение об ошибке в session.messages[]
     failureFlash: true, // ctx.flash, better
-    successFlash: true
+    // successFlash: true
 
     // assignProperty: 'something' присвоить юзера в свойство req.something
     //   - нужно для привязывания акков соц. сетей

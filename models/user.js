@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   },
   email:         {
     type:     String,
-    unique:   true,
+    unique:   "Такой email уже существует",
     required: "E-mail пользователя не должен быть пустым.",
     validate: [
       {
@@ -21,13 +21,27 @@ const userSchema = new mongoose.Schema({
       }
     ]
   },
-  passwordHash:  {
+  deleted: Boolean,
+  gender: {
     type: String,
-    required: true
+    enum: {
+      values:  ['male', 'female'],
+      message: "Неизвестное значение для пола."
+    }
+  },
+  providers: [{
+    name:    String,
+    nameId:  {
+      type:  String,
+      index: true
+    },
+    profile: {} // updates just fine if I replace it with a new value, w/o going inside
+  }],
+  passwordHash:  {
+    type: String
   },
   // 'password' + 'afjahfkjhaklfjha7f687a6fa76' = 'sgsgs;jghsgs8g76s7'
   salt:          {
-    required: true,
     type: String
   }
 }, {
@@ -53,6 +67,8 @@ userSchema.virtual('password')
       }
     }
 
+    this._plainPassword = password
+
     if (password) {
       this.salt = crypto.randomBytes(config.crypto.hash.length).toString('base64');
       this.passwordHash = crypto.pbkdf2Sync(
@@ -67,19 +83,24 @@ userSchema.virtual('password')
       this.salt = undefined;
       this.passwordHash = undefined;
     }
+  })
+  .get(function() {
+    return this._plainPassword;
   });
 
 userSchema.methods.checkPassword = function(password) {
   if (!password) return false; // empty password means no login by password
   if (!this.passwordHash) return false; // this user does not have password (the line below would hang!)
 
-  return crypto.pbkdf2Sync(
+  const passwordHash = crypto.pbkdf2Sync(
     password,
     this.salt,
     config.crypto.hash.iterations,
     config.crypto.hash.length,
     'sha512'
-  ).toString('base64') === this.passwordHash;
+  ).toString('base64');
+
+  return passwordHash === this.passwordHash;
 };
 
 module.exports = mongoose.model('User', userSchema);

@@ -7,14 +7,14 @@ exports.init = app => app.use(async function(ctx, next) {
   // clear all flash
   delete ctx.session.messages;
 
-  ctx.getFlashMessages = function(type) {
+  ctx.flash = function(type, html) {
+
     if (type === undefined) {
       return messages || {};
     }
-    return messages[type] || [];
-  };
-
-  ctx.flash = function(type, html) {
+    if (html === undefined) {
+      return messages[type] || [];
+    }
 
     if (!ctx.session.messages) {
       ctx.session.messages = {};

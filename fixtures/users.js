@@ -1,11 +1,14 @@
+const oid = require('../libs/oid');
 require('../models/user');
 
 exports.User = [{
-  email:    "exampl1@home.ru",
-  displayName: 'example1',
+  _id:      oid('user-mk'),
+  email:    "mk@javascript.ru",
+  displayName: 'mk',
   password: '123456'
 }, {
-  email:    "example2@home.ru",
-  displayName: 'example2',
+  _id:      oid('user-iliakan'),
+  email:    "iliakan@javascript.ru",
+  displayName: 'iliakan',
   password: '123456'
 }];
