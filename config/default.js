@@ -6,7 +6,7 @@ module.exports = {
   // or a separate config
   secret: 'mysecret',
   server: {
-    siteHost: 'http://localhost:3000'
+    siteHost: process.env.SITE_HOST || 'http://localhost:3000'
   },
   root: process.cwd(),
   port: process.env.PORT || 3000,
