@@ -14,7 +14,7 @@
     },
     "env_production": {
       "NODE_ENV": "production",
-      "SITE_HOST": "https://krasnoevino.ga/"
+      "SITE_HOST": "https://krasnoevino.ga"
     }
   }],
 
