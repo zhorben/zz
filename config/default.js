@@ -8,7 +8,7 @@ require('dotenv').config(configOptions)
 module.exports = {
   // secret data can be moved to env variables
   // or a separate config
-  secret: 'mysecret',
+  secret: process.env.SECRET,
   server: {
     siteHost: process.env.SITE_HOST
   },
