@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "aws": "0.0.3-2",
+    "aws-sdk": "^2.538.0",
     "clarify": "^2.0.0",
     "co": "^4.6.0",
     "co-busboy": "^1.3.1",

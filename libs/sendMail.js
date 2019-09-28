@@ -4,7 +4,8 @@ const juice = require('juice');
 const config = require('config');
 const fs = require('fs');
 const path = require('path');
-const AWS = require('aws');
+// const AWS = require('aws');
+const AWS = require('aws-sdk');
 const pug = require('pug');
 const Letter = require('../models/letter');
 
@@ -17,6 +18,8 @@ const SesTransport = require('nodemailer-ses-transport');
 // allow less secure apps
 const SMTPTransport = require('nodemailer-smtp-transport');
 
+AWS.config.update(config.mailer.aws);
+
 const transportEngine = (process.env.NODE_ENV == 'test' || process.env.MAILER_DISABLED)
   ? stubTransport()
   : config.mailer.transport == 'aws'
@@ -25,12 +28,11 @@ const transportEngine = (process.env.NODE_ENV == 'test' || process.env.MAILER_DI
           rateLimit: 50
         })
       : new SMTPTransport({
-          service: "gmail",
+          service: "Gmail",
+          debug: true,
           auth: {
-            type: "OAuth2",
-            user: process.env.MAIL_USER,
-            clientId: process.env.GOOGLE_APP_ID,
-            clientSecret: process.env.GOOGLE_APP_SECRET
+            user: config.mailer.gmail.user,
+            pass: config.mailer.gmail.password
           }
         });
 

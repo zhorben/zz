@@ -66,6 +66,11 @@ module.exports = {
       user: process.env.MAIL_USER,
       password: process.env.MAIL_PASSWORD
     },
+    aws: {
+      accessKeyId: process.env.AWS_ACCESS_ID,
+      secretAccessKey: process.env.AWS_SECRET,
+      region: "eu-west-2"
+    },
     senders:  {
       // transactional emails, register/forgot pass etc
       default:  {
