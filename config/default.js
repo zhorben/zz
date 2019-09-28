@@ -69,7 +69,7 @@ module.exports = {
     aws: {
       accessKeyId: process.env.AWS_ACCESS_ID,
       secretAccessKey: process.env.AWS_SECRET,
-      region: "eu-west-2"
+      region: "eu-west-1"
     },
     senders:  {
       // transactional emails, register/forgot pass etc
