@@ -7,14 +7,11 @@
     "max_memory_restart": "2G",
     "kill_timeout": 5000,
     "wait_ready": true,
-    "autorestart": true,
-    "watch": false,
     "env": {
       "NODE_ENV": "development"
     },
     "env_production": {
-      "NODE_ENV": "production",
-      "SITE_HOST": "https://krasnoevino.ga"
+      "NODE_ENV": "production"
     }
   }],
 

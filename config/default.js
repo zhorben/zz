@@ -1,18 +1,22 @@
 const defer = require('config/defer').deferConfig;
 const path = require('path');
 
+const configOptions = process.env.NODE_ENV === 'production' ? { path: './.env.production', debug: true } : {}
+
+require('dotenv').config(configOptions)
+
 module.exports = {
   // secret data can be moved to env variables
   // or a separate config
   secret: 'mysecret',
   server: {
-    siteHost: process.env.SITE_HOST || 'http://localhost:3000'
+    siteHost: process.env.SITE_HOST
   },
   root: process.cwd(),
-  port: process.env.PORT || 3000,
-  mongoDB: process.env.MONGODB_URI || 'mongodb://localhost/zhorben',
+  port: process.env.PORT,
+  mongoDB: process.env.MONGODB_URI,
   mongoose: {
-    uri: 'mongodb://localhost/zhorben',
+    uri: process.env.MONGOOSE_URI,
     options: {
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -34,8 +38,8 @@ module.exports = {
   },
   providers: {
     facebook: {
-      appId: '478906086298054',
-      appSecret: '339a49fe96f98727d1fe5cc5fdc531d0',
+      appId: process.env.FACEBOOK_APP_ID,
+      appSecret: process.env.FACEBOOK_APP_SECRET,
       // test: {
       //   login: 'course.test.facebook@gmail.com',
       //   password: 'course-test-facebook'
@@ -46,8 +50,8 @@ module.exports = {
       }
     },
     google: {
-      appId: '459579862914-nsitd0p492vaap2adieodccrafricanl.apps.googleusercontent.com',
-      appSecret: 'w8GLPlarlZFdzp73OtgYPM6j',
+      appId: process.env.GOOGLE_APP_ID,
+      appSecret: process.env.GOOGLE_APP_SECRET,
       passportOptions: {
         scope:   ['profile', 'email']
       }
