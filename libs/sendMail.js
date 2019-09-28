@@ -25,8 +25,9 @@ const transportEngine = (process.env.NODE_ENV == 'test' || process.env.MAILER_DI
           rateLimit: 50
         })
       : new SMTPTransport({
-          service: "Gmail",
-          debug: true,
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
           auth: {
             user: config.mailer.gmail.user,
             pass: config.mailer.gmail.password
