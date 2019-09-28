@@ -31,6 +31,10 @@ const router = new Router();
 router.get('/', require('./routes/frontpage').get);
 router.post('/login', require('./routes/login').post);
 router.post('/logout', require('./routes/logout').post);
+router.post('/register', require('./routes/register').post);
+router.get('/register', require('./routes/register').get);
+
+router.get('/verify-email/:verifyEmailToken', require('./routes/verifyEmail').get);
 
 // login
 router.get('/login/facebook', passport.authenticate('facebook', config.providers.facebook.passportOptions));

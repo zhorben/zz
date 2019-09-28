@@ -1,9 +1,11 @@
 const defer = require('config/defer').deferConfig;
 const path = require('path');
 
-const configOptions = process.env.NODE_ENV === 'production' ? { path: './.env.production', debug: true } : {}
-
-require('dotenv').config(configOptions)
+if (process.env.NODE_ENV === 'production') {
+  require('dotenv').config({ path: './.env.production', debug: true })
+} else {
+  require('dotenv').config()
+}
 
 module.exports = {
   // secret data can be moved to env variables
@@ -57,4 +59,26 @@ module.exports = {
       }
     }
   },
+  mailer: {
+    // transport, aws
+    transport: process.env.MAIL_TRANSPORT,
+    gmail: {
+      user: process.env.MAIL_USER,
+      password: process.env.MAIL_PASSWORD
+    },
+    senders:  {
+      // transactional emails, register/forgot pass etc
+      default:  {
+        fromEmail: process.env.MAIL_FROM,
+        fromName:  process.env.MAIL_FROM_NAME,
+        signature: process.env.MAIL_SIGNATURE
+      },
+      // newsletters example
+      informer: {
+        fromEmail: process.env.MAIL_INFORMER_FROM,
+        fromName:  process.env.MAIL_INFORMER_FROM_NAME,
+        signature: process.env.MAIL_INFORMER_SIGNATURE
+      }
+    }
+  }
 };

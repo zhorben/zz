@@ -43,7 +43,9 @@ const userSchema = new mongoose.Schema({
   // 'password' + 'afjahfkjhaklfjha7f687a6fa76' = 'sgsgs;jghsgs8g76s7'
   salt:          {
     type: String
-  }
+  },
+  verifyEmailToken: String,
+  verifiedEmail: Boolean,
 }, {
   timestamps: true
 });

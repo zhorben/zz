@@ -5,6 +5,8 @@ const config = require('config');
 
 exports.init = app => app.use(session({
   key:     config.secret,
+  // touch session.updatedAt in DB & reset cookie on every visit to prolong the session
+  // koa-session-mongoose resaves the session as a whole, not just a single field
   rolling: true,
 
   store: mongooseStore.create({
