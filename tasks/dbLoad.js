@@ -20,7 +20,7 @@ module.exports = function() {
 
     console.log("loading db " + dbPath);
 
-    await clearDatabase();
+    // await clearDatabase();
     await loadModels(require(dbPath));
 
     console.log("loaded db " + dbPath);

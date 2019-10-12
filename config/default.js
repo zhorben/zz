@@ -1,11 +1,6 @@
 const defer = require('config/defer').deferConfig;
 const path = require('path');
-
-if (process.env.NODE_ENV === 'production') {
-  require('dotenv').config({ path: './.env.production', debug: true })
-} else {
-  require('dotenv').config()
-}
+require('dotenv').config()
 
 module.exports = {
   // secret data can be moved to env variables
@@ -22,7 +17,8 @@ module.exports = {
     options: {
       useNewUrlParser: true,
       useCreateIndex: true,
-      useFindAndModify: false
+      useFindAndModify: false,
+      useUnifiedTopology: true
     }
   },
   crypto: {

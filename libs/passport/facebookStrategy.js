@@ -1,11 +1,11 @@
-const User = require('../../models/user');
-const FacebookStrategy = require('passport-facebook').Strategy;
-const authenticateByProfile = require('./authenticateByProfile');
-const config = require('config');
-const request = require('request-promise');
+import User from '../../models/user'
+import { Strategy as FacebookStrategy } from 'passport-facebook'
+import authenticateByProfile from './authenticateByProfile'
+import config from 'config'
+import request from 'request-promise'
 
 function UserAuthError(message) {
-  this.message = message;
+  this.message = message
 }
 /*
   OAuth2,
@@ -18,7 +18,7 @@ function UserAuthError(message) {
   -> website (welcome)
 
 */
-module.exports = new FacebookStrategy({
+export default new FacebookStrategy({
     clientID:          config.providers.facebook.appId,
     clientSecret:      config.providers.facebook.appSecret,
     callbackURL:       config.server.siteHost + "/oauth/facebook",

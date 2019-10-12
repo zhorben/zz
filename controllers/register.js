@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const passport = require('koa-passport');
 const sendMail = require('../libs/sendMail');
 const config = require('config');
 const uuid4 = require('uuid4');
@@ -47,6 +46,6 @@ exports.post = async function(ctx) {
   });
 
   ctx.flash('success', 'Вы зарегистрированы. Пожалуйста, загляните в почтовый ящик, там письмо с Email-подтверждением.');
-  ctx.redirect('/register');
+  ctx.redirect('/');
 
 };

@@ -1,6 +1,4 @@
 const User = require('../models/user');
-const path = require('path');
-const config = require('config');
 
 exports.get = async function(ctx, next) {
 

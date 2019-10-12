@@ -1,5 +1,8 @@
 extends layout
 
+block scripts
+  script(src='/search.js')
+
 block content
 
   h1 Welcome, #{user.displayName} !
@@ -9,3 +12,10 @@ block content
   form(action="/logout" method="post")
     input(type="hidden" name="_csrf" value=csrf)
     button.btn.btn-primary(type="submit") Logout
+
+  div.designers
+    each designer in designers
+      p #{designer.title}
+
+  label(for="search") Search
+  input.form-control(type="search" id="searchInput" name="search")

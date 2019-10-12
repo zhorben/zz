@@ -1,7 +1,8 @@
 
 // Parse application/json, application/x-www-form-urlencoded
 // NOT form/multipart!
-const bodyParser = require('koa-bodyparser');
-exports.init = app => app.use(bodyParser({
+import bodyParser from 'koa-bodyparser'
+
+export default bodyParser({
   jsonLimit: '56kb'
-}));
+})

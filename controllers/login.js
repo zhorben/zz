@@ -1,5 +1,5 @@
 
-const passport = require('koa-passport');
+import passport from 'koa-passport'
 
 
 exports.post = async function(ctx, next) {

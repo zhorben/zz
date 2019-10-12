@@ -105,4 +105,6 @@ userSchema.methods.checkPassword = function(password) {
   return passwordHash === this.passwordHash;
 };
 
+userSchema.statics.publicFields = ['email', 'displayName'];
+
 module.exports = mongoose.model('User', userSchema);

@@ -1,8 +1,8 @@
-const User = require('../../models/user');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const authenticateByProfile = require('./authenticateByProfile');
-const config = require('config');
-const request = require('request-promise');
+import User from '../../models/user'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import authenticateByProfile from './authenticateByProfile'
+import config from 'config'
+import request from 'request-promise'
 
 function UserAuthError(message) {
   this.message = message;
@@ -18,7 +18,7 @@ function UserAuthError(message) {
   -> website (welcome)
 
 */
-module.exports = new GoogleStrategy({
+export default new GoogleStrategy({
     clientID:          config.providers.google.appId,
     clientSecret:      config.providers.google.appSecret,
     callbackURL:       config.server.siteHost + "/google/callback",

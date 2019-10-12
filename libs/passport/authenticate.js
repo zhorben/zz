@@ -1,17 +1,14 @@
-const User = require('../../models/user');
-const config = require('config');
-const co = require('co');
-const request = require('request-promise');
+import User from '../../models/user'
 
 function UserAuthError(message) {
   this.message = message;
 }
 
-module.exports = async function(req, profile, done) {
+export default async (req, profile, done) => {
   // profile = the data returned by the facebook graph api
-  const userToConnect = req.user;
+  const userToConnect = req.user
 
-  const providerNameId = makeProviderId(profile);   // "facebook:123456"
+  const providerNameId = makeProviderId(profile)   // "facebook:123456"
 
   let user;
 
@@ -78,7 +75,7 @@ module.exports = async function(req, profile, done) {
       done(err);
     }
   }
-};
+}
 
 
 

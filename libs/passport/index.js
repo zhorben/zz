@@ -1,9 +1,13 @@
-const passport = require('koa-passport');
+import { KoaPassport } from 'koa-passport'
 
-require('./serialize');
+import localStrategy from './strategies/local'
+import facebookStrategy from './strategies/facebook'
+import googleStrategy from './strategies/google'
 
-passport.use(require('./localStrategy'));
-passport.use(require('./facebookStrategy'));
-passport.use(require('./googleStrategy'));
+const passport = new KoaPassport()
 
-module.exports = passport;
+passport.use(localStrategy)
+passport.use(facebookStrategy)
+passport.use(googleStrategy)
+
+export default passport

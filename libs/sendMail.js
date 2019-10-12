@@ -32,8 +32,8 @@ const transportEngine = (process.env.NODE_ENV == 'test' || process.env.MAILER_DI
           debug: true,
           auth: {
             user: config.mailer.gmail.user,
-            pass: config.mailer.gmail.password
-          }
+            pass: config.mailer.gmail.password,
+          },
         });
 
 const transport = nodemailer.createTransport(transportEngine);
