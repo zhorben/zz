@@ -21,4 +21,8 @@ gulp.task('nodemon', () => {
   });
 });
 
+require = require('esm')(module)
+
+// module.exports = require('./app.js')
+
 gulp.task('db:load', require('./tasks/dbLoad'));

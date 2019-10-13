@@ -6,14 +6,16 @@ module.exports = {
   // secret data can be moved to env variables
   // or a separate config
   secret: process.env.SECRET,
+  jwtSecret: process.env.JWT_SECRET,
   server: {
     siteHost: process.env.SITE_HOST
   },
   root: process.cwd(),
   port: process.env.PORT,
-  mongoDB: process.env.MONGODB_URI,
+  mongodb: {
+    uri: process.env.MONGODB_URI
+  },
   mongoose: {
-    uri: process.env.MONGOOSE_URI,
     options: {
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -22,17 +24,13 @@ module.exports = {
     }
   },
   crypto: {
-    hash: {
-      length:     128,
-      // may be slow(!): iterations = 12000 take ~60ms to generate strong password
-      iterations: process.env.NODE_ENV == 'production' ? 12000 : 1
-    }
+    iterations: (process.env.NODE_ENV === 'production' ? 12000 : 1),
+    length: 128,
+    digest: 'sha512'
   },
   template: {
     // template.root uses config.root
-    root: defer(function(cfg) {
-      return path.join(cfg.root, 'templates');
-    })
+    root: defer((cfg) => path.join(cfg.root, 'templates'))
   },
   providers: {
     facebook: {

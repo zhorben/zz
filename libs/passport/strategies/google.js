@@ -1,23 +1,21 @@
-import User from '../../models/user'
+
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import authenticateByProfile from './authenticateByProfile'
+import authenticate from './authenticate'
 import config from 'config'
-import request from 'request-promise'
+import get from 'lodash/get'
 
-function UserAuthError(message) {
-  this.message = message;
-}
-/*
-  OAuth2,
+export default new FacebookStrategy({
+  clientID: config.providers.google.appId,
+  clientSecret: config.providers.google.appSecret,
+  callbackURL: config.server.siteHost + '/google/callback',
+  // fields are described here:
+  // https://developers.facebook.com/docs/graph-api/reference/v2.7/user
+  profileFields: ['id', 'about', 'email', 'gender', 'link', 'locale', 'timezone', 'name', 'photos'],
+  session: false,
+}, (accessToken, refreshToken, profile, done) => {
+  authenticate('facebook', get(profile, 'emails[0].value'), profile.displayName, done)
+})
 
-  website -> facebook (clientID, clientSecret) -> website (code) (|)
-
-      code -> request(code) -> access_token -> requestFacebookAPI(access_token) ->
-      profile
-
-  -> website (welcome)
-
-*/
 export default new GoogleStrategy({
     clientID:          config.providers.google.appId,
     clientSecret:      config.providers.google.appSecret,

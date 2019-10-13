@@ -29,9 +29,11 @@
     "growl": "^1.10.5",
     "gulp": "^4.0.2",
     "gulp-nodemon": "^2.4.2",
+    "jsonwebtoken": "^8.5.1",
     "juice": "^5.2.0",
     "koa": "^2.10.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-compose": "^4.1.0",
     "koa-convert": "^1.2.0",
     "koa-favicon": "^2.0.1",
     "koa-generic-session": "^2.0.1",
@@ -52,6 +54,7 @@
     "passport-local": "^1.0.0",
     "pug": "^2.0.4",
     "set-value": "^3.0.1",
+    "superagent": "^5.1.0",
     "uuid4": "^1.1.4"
   },
   "devDependencies": {
@@ -60,7 +63,6 @@
     "eslint-config-google": "^0.14.0",
     "mocha": "^6.2.1",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4",
     "should": "^13.2.3"
   }
 }

@@ -1,13 +1,13 @@
-const mongoose = require('./mongoose');
+import connection from './connection'
 
-module.exports = async function (models) {
+export default async (models) => {
 
   let promises = [];
   for (let name in models) {
     let modelObjects = models[name];
 
     for (let modelObject of modelObjects) {
-      promises.push(mongoose.model(name).create(modelObject));
+      promises.push(connection.model(name).create(modelObject));
     }
   }
 

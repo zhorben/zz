@@ -1,0 +1,19 @@
+export const handleMongooseValidationError = async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    if (err.name !== 'ValidationError') throw err
+
+    ctx.status = 400
+
+    const errors = {}
+
+    for (const field in err.errors) {
+      errors[field] = err.errors[field].message
+    }
+
+    ctx.body = {
+      errors: errors,
+    }
+  }
+}

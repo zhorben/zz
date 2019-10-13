@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const crypto = require('crypto');
-const _ = require('lodash');
-const config = require('config');
+import mongoose from 'mongoose'
+import crypto from 'crypto'
+import config from 'config'
+import connection from '../libs/connection'
 
 const userSchema = new mongoose.Schema({
   displayName:   {
@@ -40,71 +40,51 @@ const userSchema = new mongoose.Schema({
   passwordHash:  {
     type: String
   },
-  // 'password' + 'afjahfkjhaklfjha7f687a6fa76' = 'sgsgs;jghsgs8g76s7'
   salt:          {
     type: String
   },
-  verifyEmailToken: String,
+  verificationToken: String,
   verifiedEmail: Boolean,
 }, {
   timestamps: true
 });
-/*
-await User.create({
-  displayName: 'Ivan',
-  password: '123123'
-})
 
-await user = User.find({...});
-user.password = '123456';
-await user.save();
-*/
-userSchema.virtual('password')
-  // https://www.npmjs.com/package/bcrypt
-  .set(function(password) {
-
-    if (password !== undefined) {
-      if (password.length < 6) {
-        this.invalidate('password', 'Пароль должен быть минимум 6 символов.');
+const generatePassword = (salt, password) => {
+  return new Promise((resolve, reject) => {
+    crypto.pbkdf2(
+      password, salt,
+      config.crypto.iterations,
+      config.crypto.length,
+      config.crypto.digest,
+      (err, key) => {
+        if (err) return reject(err)
+        resolve(key.toString('hex'))
       }
-    }
-
-    this._plainPassword = password
-
-    if (password) {
-      this.salt = crypto.randomBytes(config.crypto.hash.length).toString('base64');
-      this.passwordHash = crypto.pbkdf2Sync(
-        password,
-        this.salt,
-        config.crypto.hash.iterations,
-        config.crypto.hash.length,
-        'sha512' // sha512
-      ).toString('base64');
-    } else {
-      // remove password (unable to login w/ password any more, but can use providers)
-      this.salt = undefined;
-      this.passwordHash = undefined;
-    }
+    )
   })
-  .get(function() {
-    return this._plainPassword;
-  });
+}
 
-userSchema.methods.checkPassword = function(password) {
-  if (!password) return false; // empty password means no login by password
-  if (!this.passwordHash) return false; // this user does not have password (the line below would hang!)
+const generateSalt = () => {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(config.crypto.length, (err, buffer) => {
+      if (err) return reject(err)
+      resolve(buffer.toString('hex'))
+    })
+  })
+}
 
-  const passwordHash = crypto.pbkdf2Sync(
-    password,
-    this.salt,
-    config.crypto.hash.iterations,
-    config.crypto.hash.length,
-    'sha512'
-  ).toString('base64');
+userSchema.methods.setPassword = async function setPassword(password) {
+  this.salt = await generateSalt()
+  this.passwordHash = await generatePassword(this.salt, password)
+}
 
-  return passwordHash === this.passwordHash;
-};
+userSchema.methods.checkPassword = async function (password) {
+  if (!password) return false
 
-userSchema.statics.publicFields = ['email', 'displayName'];
+  const hash = await generatePassword(this.salt, password)
+  return hash === this.passwordHash
+}
 
-module.exports = mongoose.model('User', userSchema);
+userSchema.statics.publicFields = ['email', 'displayName']
+
+export default connection.model('User', userSchema)

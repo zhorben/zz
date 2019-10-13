@@ -2,7 +2,7 @@ const fs = require('fs');
 const co = require('co');
 const path = require('path');
 const root = require('config').root;
-const mongoose = require('../libs/mongoose');
+const connection = require('../libs/connection');
 const loadModels = require('../libs/loadModels');
 const clearDatabase = require('../libs/clearDatabase');
 
@@ -25,7 +25,7 @@ module.exports = function() {
 
     console.log("loaded db " + dbPath);
 
-    mongoose.disconnect();
+    connection.disconnect();
   });
 
 };

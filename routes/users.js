@@ -1,16 +1,16 @@
 const Router = require('koa-router');
-const mongoose = require('../libs/mongoose');
+const connection = require('../libs/connection');
 const pick = require('lodash/pick');
 
 const router = new Router({
   prefix: '/users'
 });
 
-const User = require('../models/user');
+const User = require('../models/User');
 
 router
   .param('userById', async (id, ctx, next) => {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!connection.Types.ObjectId.isValid(id)) {
       ctx.throw(404);
     }
 

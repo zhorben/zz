@@ -1,90 +1,85 @@
-'use strict';
+import Letter from '../models/Letter'
 
-const juice = require('juice');
-const config = require('config');
-const fs = require('fs');
-const path = require('path');
-// const AWS = require('aws');
-const AWS = require('aws-sdk');
-const pug = require('pug');
-const Letter = require('../models/letter');
+import juice from 'juice'
+import config from 'config'
+import path from 'path'
+import AWS from 'aws-sdk'
+import pug from 'pug'
+import nodemailer from 'nodemailer'
+import { htmlToText } from 'nodemailer-html-to-text'
+import stubTransport from 'nodemailer-stub-transport'
+import SesTransport from 'nodemailer-ses-transport'
+import SMTPTransport from 'nodemailer-smtp-transport'
 
-const nodemailer = require('nodemailer');
-const htmlToText = require('nodemailer-html-to-text').htmlToText;
-const stubTransport = require('nodemailer-stub-transport');
-const SesTransport = require('nodemailer-ses-transport');
+AWS.config.update(config.mailer.aws)
 
-// configure gmail: https://nodemailer.com/using-gmail/
-// allow less secure apps
-const SMTPTransport = require('nodemailer-smtp-transport');
-
-AWS.config.update(config.mailer.aws);
-
-const transportEngine = (process.env.NODE_ENV == 'test' || process.env.MAILER_DISABLED)
+export const transportEngine = (process.env.NODE_ENV === 'test' || process.env.MAILER_DISABLED)
   ? stubTransport()
-  : config.mailer.transport == 'aws'
-      ? new SesTransport({
-          ses: new AWS.SES(),
-          rateLimit: 50
-        })
-      : new SMTPTransport({
-          service: "Gmail",
-          debug: true,
-          auth: {
-            user: config.mailer.gmail.user,
-            pass: config.mailer.gmail.password,
-          },
-        });
+  : config.mailer.transport === 'aws'
+    ? new SesTransport({
+        ses: new AWS.SES(),
+        rateLimit: 50
+      })
+    : new SMTPTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: config.mailer.gmail.user,
+          pass: config.mailer.gmail.password,
+        }
+      })
 
-const transport = nodemailer.createTransport(transportEngine);
+const transport = nodemailer.createTransport(transportEngine)
 
-transport.use('compile', htmlToText());
+transport.use('compile', htmlToText())
 
-module.exports = async function(options) {
+/*
+* sendMail - функция, отправляющая письмо на указанный адрес
+* options - объект, содержащий опции для отправки писем:
+* options.template - имя файла, содержащего шаблон письма
+* options.locals - объект с переменными, которые будут переданы в шаблон
+* options.to - email, на который будет отправлено письмо
+* options.subject - тема письма
+* пример:
+*     await sendMail({
+*       template: 'confirmation',
+*       locals: {token: 'token'},
+*       to: 'user@mail.com',
+*       subject: 'Подтвердите почту',
+*     });
+* */
+export const sendMail = async (options = {}) => {
 
-  let message = {};
+  let sender = config.mailer.senders[options.from || 'default']
 
-  let sender = config.mailer.senders[options.from || 'default'];
-  if (!sender) {
-    throw new Error("Unknown sender:" + options.from);
+  const html = pug.renderFile(
+    path.join(config.template.root, 'email', options.template) + '.pug',
+    {
+      sender,
+      ...options.locals
+    }
+  )
+
+  const message = {
+    html: juice(html),
+    to: {
+      address: options.to,
+    },
+    subject: options.subject
+    // from: {
+    //   name: sender.fromName,
+    //   address: sender.fromEmail
+    // },
   }
 
-  message.from = {
-    name: sender.fromName,
-    address: sender.fromEmail
-  };
+  const transportResponse = await transport.sendMail(message)
 
-  // for template
-  let locals = Object.create(options);
-
-  locals.config = config;
-  locals.sender = sender;
-
-  message.html  = pug.renderFile(path.join(config.template.root, 'email', options.template) + '.pug', locals);
-  message.html  = juice(message.html);
-
-
-  message.to = (typeof options.to == 'string') ? {address: options.to} : options.to;
-
-  if (process.env.MAILER_REDIRECT) { // for debugging
-    message.to = {address: sender.fromEmail};
-  }
-
-  if (!message.to.address) {
-    throw new Error("No email for recepient, message options:" + JSON.stringify(options));
-  }
-
-  message.subject = options.subject;
-
-  message.headers = options.headers;
-
-  let transportResponse = await transport.sendMail(message);
-
-  let letter = await Letter.create({
+  const letter = await Letter.create({
     message,
     transportResponse,
     messageId: transportResponse.messageId //.replace(/@email.amazonses.com$/, '')
-  });
+  })
 
-  return letter;
+  return letter
 }

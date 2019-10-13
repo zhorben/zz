@@ -1,9 +1,7 @@
-'use strict';
+import mongoose from 'mongoose'
+import connection from '../libs/connection'
 
-const mongoose = require('../libs/mongoose');
-const Schema = mongoose.Schema;
-
-const schema = new Schema({
+const schema = new mongoose.Schema({
   message: {},
 
   messageId: String, // from transport
@@ -21,10 +19,9 @@ const schema = new Schema({
 
 }, {
   timestamps: true
-});
+})
 
+schema.index({ 'message.to.address': 1 }) // Message.find({'message.to.address': 'mail@mail.com'})
+schema.index({ 'messageId': 1 })
 
-schema.index({ 'message.to.address': 1 }); // Message.find({'message.to.address': 'mail@mail.com'})
-schema.index({ 'messageId': 1 });
-
-module.exports = mongoose.model('Letter', schema);
+export default connection.model('Letter', schema)

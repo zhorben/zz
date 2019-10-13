@@ -1,15 +1,15 @@
-const {promisify} = require('util');
-const assert = require('assert');
-const mongoose = require('./mongoose');
+import { promisify } from 'util'
+import assert from 'assert'
+import connection from '../libs/connection'
 
-module.exports = async function clearDatabase() {
+export const clearDatabase = async () => {
 
-  if (mongoose.connection.readyState == 2) { // connecting
-    await promisify(cb => mongoose.connection.on('open', cb))();
+  if (connection.readyState === 2) { // connecting
+    await promisify(cb => connection.on('open', cb))();
   }
-  assert(mongoose.connection.readyState == 1);
+  assert(connection.readyState === 1);
 
-  const db = mongoose.connection.db;
+  const db = connection.db;
 
   let collections = await promisify(cb => db.listCollections().toArray(cb))();
 
@@ -25,8 +25,8 @@ module.exports = async function clearDatabase() {
     })
   );
 
-  await Promise.all(mongoose.modelNames().map(function(modelName) {
-    const model = mongoose.model(modelName);
+  await Promise.all(connection.modelNames().map(function(modelName) {
+    const model = connection.model(modelName);
     return promisify(cb => model.createIndexes(cb))();
   }));
 };
