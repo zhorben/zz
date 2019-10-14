@@ -4,6 +4,7 @@ import logger from './logger'
 import errors from './errors'
 import bodyParser from './bodyParser'
 import cors from './cors'
+import login from './login'
 
 export default [
   favicon,
@@ -11,5 +12,6 @@ export default [
   staticServe,
   logger,
   errors,
-  bodyParser
+  bodyParser,
+  login
 ]

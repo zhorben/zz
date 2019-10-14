@@ -29,14 +29,6 @@ const userSchema = new mongoose.Schema({
       message: "Неизвестное значение для пола."
     }
   },
-  providers: [{
-    name:    String,
-    nameId:  {
-      type:  String,
-      index: true
-    },
-    profile: {} // updates just fine if I replace it with a new value, w/o going inside
-  }],
   passwordHash:  {
     type: String
   },

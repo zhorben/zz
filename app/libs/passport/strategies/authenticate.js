@@ -1,18 +1,13 @@
 import User from '../../../models/User'
 
-const makeProviderId = (profile) => `${profile.provider}:${profile.id}`
-
-export const authenticate = async (strategy, profile, done) => {
-
-  const providerNameId = makeProviderId(profile)   // "facebook:123456"
-
+export default async (strategy, email, displayName, done) => {
 
   if (!email) {
     return done(null, false, 'Не указан email')
   }
 
   try {
-    let user = await User.findOne({email})
+    let user = await User.findOne({ email })
 
     if (user) {
       return done(null, user)
@@ -26,4 +21,5 @@ export const authenticate = async (strategy, profile, done) => {
   } catch (err) {
     done(err)
   }
+  
 }

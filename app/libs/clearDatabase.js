@@ -1,6 +1,6 @@
 import { promisify } from 'util'
 import assert from 'assert'
-import connection from '../libs/connection'
+import connection from './connection'
 
 export const clearDatabase = async () => {
 

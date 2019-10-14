@@ -2,9 +2,9 @@ const fs = require('fs');
 const co = require('co');
 const path = require('path');
 const root = require('config').root;
-const connection = require('../libs/connection');
-const loadModels = require('../libs/loadModels');
-const clearDatabase = require('../libs/clearDatabase');
+const connection = require('../app/libs/connection');
+const loadModels = require('../app/libs/loadModels');
+const clearDatabase = require('../app/libs/clearDatabase');
 
 module.exports = function() {
 

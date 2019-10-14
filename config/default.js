@@ -30,7 +30,7 @@ module.exports = {
   },
   template: {
     // template.root uses config.root
-    root: defer((cfg) => path.join(cfg.root, 'templates'))
+    root: defer((cfg) => path.join(cfg.root, 'app/templates'))
   },
   providers: {
     facebook: {
@@ -40,15 +40,14 @@ module.exports = {
       //   login: 'course.test.facebook@gmail.com',
       //   password: 'course-test-facebook'
       // },
-      passportOptions: {
-        display: 'popup',
+      options: {
         scope:   ['email']
       }
     },
     google: {
       appId: process.env.GOOGLE_APP_ID,
       appSecret: process.env.GOOGLE_APP_SECRET,
-      passportOptions: {
+      options: {
         scope:   ['profile', 'email']
       }
     }

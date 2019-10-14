@@ -1,4 +1,4 @@
-import passport from '../app/libs/passport'
+import passport from '../libs/passport'
 
 export default async (ctx, next) => {
   await passport.authenticate('local', async (err, user, info) => {

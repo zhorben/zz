@@ -1,16 +1,16 @@
 import User from '../models/User'
-import { sendMail } from '../app/libs/sendMail'
+import { sendMail } from '../libs/sendMail'
 import config from 'config'
 import uuid4 from 'uuid4'
+// import jwt from 'jsonwebtoken'
+// import pick from 'lodash/pick'
 
 const register = async (ctx) => {
+  const {
+    email, displayName, password
+  } = ctx.request.body
 
   const verificationToken = uuid4()
-
-  const {
-    email, displayName,
-    password
-  } = ctx.request.body
 
   const user = new User({
     email: email.toLowerCase(),
