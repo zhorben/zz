@@ -18,7 +18,7 @@
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "aws": "0.0.3-2",
-    "aws-sdk": "^2.548.0",
+    "aws-sdk": "^2.814.0",
     "co": "^4.6.0",
     "co-busboy": "^1.4.0",
     "config": "^3.2.3",
